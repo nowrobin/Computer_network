@@ -15,7 +15,7 @@ def handler(packet):
 
 def sniffICMP(): 
     #srp(prn=handler,filter="icmp", iface=None, timeout=2)
-    pkt = sniff(prn=handler, filter="icmp", timeout =15)
+    pkt = sniff(prn=handler, filter="icmp", timeout =15 ,count=10 )
     for packet in pkt:
         if  str(packet.getlayer(ICMP).type) == "3":
             print ("Destination Unreachable")
@@ -23,8 +23,19 @@ def sniffICMP():
         if str(packet.getlayer(ICMP).type) == "8":
     
             print("ip" + packet[IP].src)
+def sniffARP():
+    sniff( prn=handler, filter="arp", store=0)
+
+def sniffSSH():
+    sniff(prn=handler, filter="tcp and port 22", store=0 ,count=10)
+
+
+
+
 def main():
     #패킷 덤프
  
     sniffICMP()
+    sniffARP()
+    sniffSSH()
 main()
